@@ -77,8 +77,10 @@ SYSCALL_DEFINE3(sort, const int32_t __user *, p_unsorted, int32_t __user *,
                 goto free_and_exit;
         }
 
+        printk( KERN_DEBUG "sys_sort() : Beginning sort" );
         /* Use the kernel's built in sort function, with our custom int32 comparator */
         sort( p_buffer, count, sizeof(*p_buffer), int32_compare, NULL );
+        printk( KERN_DEBUG "sys_sort() : Sorting complete" );
 
         /* Copy the now sorted data back into user space */
         if( copy_to_user(p_sorted, p_buffer, buf_size) != 0 ) {
