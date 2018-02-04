@@ -58,21 +58,21 @@ SYSCALL_DEFINE3(sort, const int32_t __user *, p_unsorted, int32_t __user *,
         int32_t *p_buffer = NULL;
         size_t buf_size = sizeof(*p_buffer) * count;
 
-        printk( KERN_INFO "sys_sort() : Entering syscall" );
+        printk( KERN_INFO "sys_sort() : Entering syscall\n" );
 
-        printk( KERN_DEBUG "sys_sort() : Allocating kernel buffer of %zu bytes",  buf_size );
+        printk( KERN_DEBUG "sys_sort() : Allocating kernel buffer of %zu bytes\n",  buf_size );
         p_buffer = kmalloc( buf_size, GFP_KERNEL );
 
         /* Attempt to allocate enough memory to perform sort within kernel space */
         if( !p_buffer ) {
-                printk( KERN_ERR "sys_sort() : Unable to allocate kernel buffer!" );
+                printk( KERN_ERR "sys_sort() : Unable to allocate kernel buffer!\n" );
                 retval = -ENOMEM;
                 goto free_and_exit;
         }
 
         /* Copy all of the source data into the kernel buffer */
         if( copy_from_user(p_buffer, p_unsorted, buf_size) != 0 ) {
-                printk( KERN_ERR "sys_sort() : Invalid source pointer!" );
+                printk( KERN_ERR "sys_sort() : Invalid source pointer!\n" );
                 retval = -EINVAL;
                 goto free_and_exit;
         }
@@ -84,7 +84,7 @@ SYSCALL_DEFINE3(sort, const int32_t __user *, p_unsorted, int32_t __user *,
 
         /* Copy the now sorted data back into user space */
         if( copy_to_user(p_sorted, p_buffer, buf_size) != 0 ) {
-                printk( KERN_ERR "sys_sort() : Invalid destination pointer!" );
+                printk( KERN_ERR "sys_sort() : Invalid destination pointer!\n" );
                 retval = -EINVAL;
         } else {
                 retval = 0;
@@ -97,9 +97,9 @@ SYSCALL_DEFINE3(sort, const int32_t __user *, p_unsorted, int32_t __user *,
          */
         free_and_exit:
 
-        printk( KERN_INFO "sys_sort() : Freeing kernel buffer" );
+        printk( KERN_INFO "sys_sort() : Freeing kernel buffer\n" );
         kfree( p_buffer );
-        printk( KERN_INFO "sys_sort() : Exiting syscall" );
+        printk( KERN_INFO "sys_sort() : Exiting syscall\n" );
 
         return retval;
 }
